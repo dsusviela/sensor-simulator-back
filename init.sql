@@ -1,0 +1,1 @@
+CREATE USER sensor_simulator_backend_development SUPERUSER;
