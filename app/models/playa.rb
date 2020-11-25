@@ -1,3 +1,3 @@
 
-class Playa < ApplicationRecord
+class Playa < Feature
 end

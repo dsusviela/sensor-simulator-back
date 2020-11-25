@@ -1,4 +1,4 @@
 
-class SensorPersona < ApplicationRecord
+class SensorPersona < Feature
   self.table_name = "sensores_personas"
 end
