@@ -1,0 +1,3 @@
+
+class Playa < ApplicationRecord
+end
