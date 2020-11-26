@@ -3,12 +3,12 @@ class Feature < ApplicationRecord
   self.primary_key = 'gid'
 
   class << self
-    def create_by_type(type, params)
-      feature_subclass(type).create(params)
+    def find_by_type(type, id)
+      feature_subclass(type).find(id)
     end
 
-    def update_by_type(type, params)
-      feature_subclass(type).update(params)
+    def create_by_type(type, params)
+      feature_subclass(type).create(params)
     end
 
     private

@@ -5,6 +5,12 @@ class FeaturesController < ApplicationController
   def create
     current_params = feature_params(required: true)
     geom = geojson_decoder.decode(current_params[:geom].to_h)
+
+    unless geom.present?
+      render nothing: true, status: :bad_request
+      return
+    end
+
     new_params = current_params.to_h
     new_params[:geom] = geom
 
@@ -14,9 +20,7 @@ class FeaturesController < ApplicationController
   end
 
   def update
-    # Esto no anda todavia
-    # Habria que definir un método find_by_type en Feature
-    feature = Feature.find(params[:id])
+    feature = Feature.find_by_type(params[:feature_type], params[:id])
 
     current_params = feature_params(required: false)
 
@@ -27,14 +31,13 @@ class FeaturesController < ApplicationController
       new_params[:geom] = geom
     end
 
-    feature.update_by_type(params[:feature_type], new_params)
+    feature.update(new_params)
 
     render json: feature
   end
 
   def destroy
-    # Esto tampoco todavia
-    feature = Feature.find(params[:id])
+    feature = Feature.find_by_type(params[:feature_type], params[:id])
     feature.delete
 
     head :no_content
@@ -65,7 +68,7 @@ class FeaturesController < ApplicationController
   end
 
   def playa_params
-    params.require(:feature).permit([:nombre, :puntaje, geom: [:type, coordinates: []]])
+    params.require(:feature).permit!
   end
 
   def playa_required_params
@@ -85,6 +88,10 @@ class FeaturesController < ApplicationController
   end
 
   def geojson_decoder
-    @geojson_decoder ||= RGeo::GeoJSON::Coder.new(geo_factory: RGeo::Geographic.spherical_factory(srid: 4326))
+    @geojson_decoder ||= RGeo::GeoJSON::Coder.new(geo_factory: geo_factory(4326))
+  end
+
+  def geo_factory(srid)
+    @geo_factory ||= RGeo::Geographic.spherical_factory(srid: srid)
   end
 end
