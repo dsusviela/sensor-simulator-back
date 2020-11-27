@@ -1,2 +1,2 @@
-class BeachSensor < Sensor
+class BeachSensor < ApplicationRecord
 end

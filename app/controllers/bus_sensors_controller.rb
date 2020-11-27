@@ -16,6 +16,8 @@ class BusSensorsController < ApplicationController
   # POST /bus_sensors
   def create
     @bus_sensor = BusSensor.new(bus_sensor_params)
+    lon, lat = params[:beach_sensor][:location].split
+    @bus_sensor.location = RGeo::Geographic.spherical_factory(srid: ENV['SRID']).point(lon, lat)
 
     if @bus_sensor.save
       render json: @bus_sensor, status: :created, location: @bus_sensor

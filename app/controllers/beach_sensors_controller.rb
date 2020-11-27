@@ -16,6 +16,8 @@ class BeachSensorsController < ApplicationController
   # POST /beach_sensors
   def create
     @beach_sensor = BeachSensor.new(beach_sensor_params)
+    lon, lat = params[:beach_sensor][:location].split
+    @beach_sensor.location = RGeo::Geographic.spherical_factory(srid: ENV['SRID']).point(lon, lat)
 
     if @beach_sensor.save
       render json: @beach_sensor, status: :created, location: @beach_sensor
@@ -46,6 +48,7 @@ class BeachSensorsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def beach_sensor_params
-      params.require(:beach_sensor).permit(:location, :device_id, :entity_name, :entity_type, :random_ceil, :random_floor, :random_seed, :random_std_dev=integer)
+      byebug
+      params.require(:beach_sensor).permit(:location, :device_id, :entity_name, :entity_type, :random_ceil, :random_floor, :random_seed, :random_std_dev, :alive, :fixed)
     end
 end
