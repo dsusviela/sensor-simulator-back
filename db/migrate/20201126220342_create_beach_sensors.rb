@@ -12,6 +12,7 @@ class CreateBeachSensors < ActiveRecord::Migration[6.0]
       t.integer :random_std_dev
       t.boolean :alive
       t.boolean :fixed
+      t.integer :fixed_value
 
       t.timestamps
     end

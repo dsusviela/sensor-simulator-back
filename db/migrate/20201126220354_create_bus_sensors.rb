@@ -9,7 +9,6 @@ class CreateBusSensors < ActiveRecord::Migration[6.0]
       t.string :ngsi_entity_name
       t.string :ngsi_entity_type
       t.boolean :alive
-      t.boolean :fixed
 
       t.timestamps
     end
