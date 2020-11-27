@@ -5,9 +5,9 @@ class CreateBusSensors < ActiveRecord::Migration[6.0]
       t.string :subline
       t.string :direction
       t.st_point :location, srid: 4326
-      t.string :device_id
-      t.string :entity_name
-      t.string :entity_type
+      t.string :ngsi_device_id
+      t.string :ngsi_entity_name
+      t.string :ngsi_entity_type
       t.boolean :alive
       t.boolean :fixed
 
