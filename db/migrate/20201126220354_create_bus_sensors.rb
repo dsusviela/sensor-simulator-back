@@ -4,7 +4,7 @@ class CreateBusSensors < ActiveRecord::Migration[6.0]
       t.string :line
       t.string :subline
       t.string :direction
-      t.st_point :location
+      t.st_point :location, srid: 4326
       t.string :device_id
       t.string :entity_name
       t.string :entity_type
