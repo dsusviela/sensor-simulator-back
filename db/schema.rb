@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_26_220354) do
+ActiveRecord::Schema.define(version: 2020_11_27_185142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 2020_11_26_220354) do
     t.integer "fixed_value"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "service_group_id", null: false
+    t.index ["service_group_id"], name: "index_beach_sensors_on_service_group_id"
   end
 
   create_table "bus_sensors", force: :cascade do |t|
@@ -44,6 +46,17 @@ ActiveRecord::Schema.define(version: 2020_11_26_220354) do
     t.boolean "alive"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "service_group_id", null: false
+    t.index ["service_group_id"], name: "index_bus_sensors_on_service_group_id"
   end
 
+  create_table "service_groups", force: :cascade do |t|
+    t.string "apikey"
+    t.boolean "is_beach"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "beach_sensors", "service_groups"
+  add_foreign_key "bus_sensors", "service_groups"
 end
