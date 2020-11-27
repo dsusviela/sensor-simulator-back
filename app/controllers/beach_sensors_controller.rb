@@ -28,7 +28,15 @@ class BeachSensorsController < ApplicationController
 
   # PATCH/PUT /beach_sensors/1
   def update
-    if @beach_sensor.update(beach_sensor_params)
+    sensor_params = beach_sensor_params.to_h
+    location = params[:beach_sensor][:location]
+
+    if location.present?
+      lon, lat = location.split
+      sensor_params[:location] = RGeo::Geographic.spherical_factory(srid: ENV['SRID']).point(lon, lat)
+    end
+
+    if @beach_sensor.update(sensor_params)
       render json: @beach_sensor
     else
       render json: @beach_sensor.errors, status: :unprocessable_entity

@@ -35,6 +35,22 @@ class BusSensorsController < ApplicationController
     end
   end
 
+  def update
+    sensor_params = bus_sensor_params.to_h
+    location = params[:bus_sensor][:location]
+
+    if location.present?
+      lon, lat = location.split
+      sensor_params[:location] = RGeo::Geographic.spherical_factory(srid: ENV['SRID']).point(lon, lat)
+    end
+
+    if @bus_sensor.update(sensor_params)
+      render json: @bus_sensor
+    else
+      render json: @bus_sensor.errors, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /bus_sensors/1
   def destroy
     @bus_sensor.destroy
@@ -48,6 +64,6 @@ class BusSensorsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def bus_sensor_params
-      params.require(:bus_sensor).permit(:line, :subline, :direction, :location, :device_id, :entity_name, :entity_type)
+      params.require(:bus_sensor).permit(:line, :subline, :direction, :location, :ngsi_device_id, :ngsi_entity_name, :ngsi_entity_type, :alive)
     end
 end
