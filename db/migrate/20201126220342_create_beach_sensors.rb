@@ -1,7 +1,7 @@
 class CreateBeachSensors < ActiveRecord::Migration[6.0]
   def change
     create_table :beach_sensors do |t|
-      t.integer :type
+      t.integer :sensor_type
       t.st_point :location, srid: 4326
       t.string :ngsi_device_id
       t.string :ngsi_entity_name

@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2020_11_26_220354) do
   enable_extension "postgis"
 
   create_table "beach_sensors", force: :cascade do |t|
-    t.integer "type"
+    t.integer "sensor_type"
     t.geometry "location", limit: {:srid=>4326, :type=>"st_point"}
     t.string "ngsi_device_id"
     t.string "ngsi_entity_name"

@@ -1,3 +1,3 @@
 class BeachSensor < ApplicationRecord
-  enum type: [:agua, :personas, :uv, :bandera]
+  enum sensor_type: [:agua, :personas, :uv, :bandera]
 end
