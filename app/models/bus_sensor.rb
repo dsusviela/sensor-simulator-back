@@ -1,0 +1,2 @@
+class BusSensor < ApplicationRecord
+end

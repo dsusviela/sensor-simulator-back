@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  location: 
+  device_id: MyString
+  entity_name: MyString
+  entity_type: MyString
+
+two:
+  location: 
+  device_id: MyString
+  entity_name: MyString
+  entity_type: MyString

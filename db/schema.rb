@@ -10,15 +10,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2020_11_26_220354) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "hstore"
-  enable_extension "pg_cron"
-  enable_extension "pgrouting"
   enable_extension "plpgsql"
   enable_extension "postgis"
-  enable_extension "postgis_raster"
-  enable_extension "postgis_topology"
+
+  create_table "beach_sensors", force: :cascade do |t|
+    t.integer "sensor_type"
+    t.geometry "location", limit: {:srid=>4326, :type=>"st_point"}
+    t.string "ngsi_device_id"
+    t.string "ngsi_entity_name"
+    t.string "ngsi_entity_type"
+    t.integer "random_ceil"
+    t.integer "random_floor"
+    t.integer "random_seed"
+    t.integer "random_std_dev"
+    t.boolean "alive"
+    t.boolean "fixed"
+    t.integer "fixed_value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "bus_sensors", force: :cascade do |t|
+    t.string "line"
+    t.string "subline"
+    t.string "direction"
+    t.geometry "location", limit: {:srid=>4326, :type=>"st_point"}
+    t.string "ngsi_device_id"
+    t.string "ngsi_entity_name"
+    t.string "ngsi_entity_type"
+    t.boolean "alive"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
 end

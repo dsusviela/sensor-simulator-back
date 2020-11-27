@@ -14,10 +14,13 @@ require "action_view/railtie"
 require "action_cable/engine"
 # require "sprockets/railtie"
 require "rails/test_unit/railtie"
+require "dotenv"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+# Load all dotenv env vars
+Dotenv::Railtie.load
 
 module SensorSimulatorBackend
   class Application < Rails::Application
