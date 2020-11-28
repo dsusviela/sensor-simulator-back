@@ -64,6 +64,6 @@ class BusSensorsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def bus_sensor_params
-      params.require(:bus_sensor).permit(:line, :subline, :direction, :location, :ngsi_device_id, :ngsi_entity_name, :ngsi_entity_type, :alive)
+      params.require(:bus_sensor).permit(:line, :subline, :direction, :alive)
     end
 end
