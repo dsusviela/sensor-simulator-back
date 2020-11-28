@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_27_185142) do
+ActiveRecord::Schema.define(version: 2020_11_27_203357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,9 +19,6 @@ ActiveRecord::Schema.define(version: 2020_11_27_185142) do
   create_table "beach_sensors", force: :cascade do |t|
     t.integer "sensor_type"
     t.geometry "location", limit: {:srid=>4326, :type=>"st_point"}
-    t.string "ngsi_device_id"
-    t.string "ngsi_entity_name"
-    t.string "ngsi_entity_type"
     t.integer "random_ceil"
     t.integer "random_floor"
     t.integer "random_seed"
@@ -32,6 +29,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_185142) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "service_group_id", null: false
+    t.integer "beach_id"
     t.index ["service_group_id"], name: "index_beach_sensors_on_service_group_id"
   end
 
@@ -40,9 +38,6 @@ ActiveRecord::Schema.define(version: 2020_11_27_185142) do
     t.string "subline"
     t.string "direction"
     t.geometry "location", limit: {:srid=>4326, :type=>"st_point"}
-    t.string "ngsi_device_id"
-    t.string "ngsi_entity_name"
-    t.string "ngsi_entity_type"
     t.boolean "alive"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
