@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_27_203357) do
+ActiveRecord::Schema.define(version: 2020_12_01_181004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,13 @@ ActiveRecord::Schema.define(version: 2020_11_27_203357) do
 
   create_table "service_groups", force: :cascade do |t|
     t.string "apikey"
+    t.boolean "is_beach"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "simulator_processes", force: :cascade do |t|
+    t.string "job_id"
     t.boolean "is_beach"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
