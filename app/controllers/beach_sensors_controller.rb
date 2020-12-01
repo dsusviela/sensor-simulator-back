@@ -1,3 +1,8 @@
+require 'rake'
+
+Rake::Task.clear # necessary to avoid tasks being loaded several times in dev mode
+SensorSimulatorBackend::Application.load_tasks # providing your application name is 'sample'
+
 class BeachSensorsController < ApplicationController
   before_action :set_beach_sensor, only: [:show, :update, :destroy]
 
@@ -47,6 +52,12 @@ class BeachSensorsController < ApplicationController
   # DELETE /beach_sensors/1
   def destroy
     @beach_sensor.destroy
+  end
+
+  def preload_data
+    Rake::Task['beach:preload_data'].invoke
+
+    render head: :ok
   end
 
   private
