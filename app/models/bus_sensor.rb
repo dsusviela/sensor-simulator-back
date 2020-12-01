@@ -9,7 +9,7 @@ class BusSensor < ApplicationRecord
     payload = {
       devices: [
         {
-          device_id: id.to_s,
+          device_id: "Vehicle#{id.to_s}",
           entity_name: "urn:ngsi-ld:Vehicle:#{id}",
           entity_type: 'Vehicle',
           static_attributes: [

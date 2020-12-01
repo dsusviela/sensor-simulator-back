@@ -12,7 +12,7 @@ class BeachSensor < ApplicationRecord
     payload = {
       devices: [
         {
-          device_id: id.to_s,
+          device_id: "Device#{id.to_s}",
           entity_name: "urn:ngsi-ld:Device:#{id}",
           entity_type: 'Device',
           static_attributes: [

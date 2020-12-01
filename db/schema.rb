@@ -37,7 +37,6 @@ ActiveRecord::Schema.define(version: 2020_11_27_203357) do
     t.string "line"
     t.string "subline"
     t.string "direction"
-    t.geometry "location", limit: {:srid=>4326, :type=>"st_point"}
     t.boolean "alive"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
