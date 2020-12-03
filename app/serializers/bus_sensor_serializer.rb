@@ -2,7 +2,7 @@ include ::Geo::Coder
 
 class BusSensorSerializer < ActiveModel::Serializer
 
-  attributes :id, :line, :subline, :direction, :location, :ngsi_device_id, :ngsi_entity_name, :ngsi_entity_type, :alive
+  attributes :id, :line, :subline, :direction, :location, :alive
 
   def location
     encode(object.location)
