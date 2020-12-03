@@ -12,6 +12,7 @@ class SimulatorProcess < ApplicationRecord
 
   def unschedule_job
     rufus_singleton.unschedule(job_id)
+    rufus_singleton.shutdown(:wait) if SimulatorProcess.all.count == 0
   end
 
   def rufus_singleton
