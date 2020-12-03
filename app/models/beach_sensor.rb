@@ -90,7 +90,7 @@ class BeachSensor < ApplicationRecord
   end
 
   def provide_sensor_to_orion
-    long_lat_match = location.to_s.match /([0-9]*\.[0-9]* [0-9]*\.[0-9]*)/
+    long_lat_match = location.to_s.match /(-?[0-9]*\.[0-9]* -?[0-9]*\.[0-9]*)/
     lon, lat = long_lat_match[0].split
     payload = {
       devices: [
