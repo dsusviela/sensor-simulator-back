@@ -7,24 +7,20 @@ class BeachSimulator
 
   def call
     Rails.logger.info "Running Beach Simulator..."
-    process = SimulatorProcess.find_by(is_beach: true)
-    if process.present?
-      threads = []
 
-      BeachSensor.where.not(sensor_type: :personas).each do |beach_sensor|
-        Rails.logger.info "Found an active sensor"
-        threads << Thread.new { beach_sensor.generate_and_send_data(@ticks) }
-      end
+    threads = []
 
-      threads << Thread.new { simulate_people_in_beach(@ticks) }
-
-      threads.each do |thread|
-        thread.join
-      end
-      @ticks += 1
-    else
-      Rails.logger.error "Simulator process running without data instance"
+    BeachSensor.where.not(sensor_type: :personas).each do |beach_sensor|
+      Rails.logger.info "Found an active sensor"
+      threads << Thread.new { beach_sensor.generate_and_send_data(@ticks) }
     end
+
+    threads << Thread.new { simulate_people_in_beach(@ticks) }
+
+    threads.each do |thread|
+      thread.join
+    end
+    @ticks += 1
   end
 
   def simulate_people_in_beach(ticks)
