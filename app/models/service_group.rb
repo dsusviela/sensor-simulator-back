@@ -6,7 +6,7 @@ class ServiceGroup < ApplicationRecord
   has_many :beach_sensors, dependent: :destroy
   has_many :bus_sensors, dependent: :destroy
 
-  after_create :provide_service_group_to_orion #, :suscribe_pygeoapi_to_orion
+  after_create :provide_service_group_to_orion, :suscribe_pygeoapi_to_orion
 
   private
 
@@ -28,7 +28,7 @@ class ServiceGroup < ApplicationRecord
 
   def suscribe_pygeoapi_to_orion
     description, suscription_type, notification_attributes, sensor_attributes = get_suscription_data
-    target_endpoint = "beach-sensor-update"
+    target_endpoint = is_beach? ? "beach-sensor-update" : "test" # detour en breve
     payload = {
       description: description,
       subject: {
