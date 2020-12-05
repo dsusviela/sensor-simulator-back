@@ -19,7 +19,7 @@ class BusSensorsController < ApplicationController
     @bus_sensor.service_group = ServiceGroupHelper.get_or_initialize_service_group(false)
 
     if @bus_sensor.save
-      render json: @bus_sensor, status: :created, location: @bus_sensor
+      render json: @bus_sensor, status: :created
     else
       render json: @bus_sensor.errors, status: :unprocessable_entity
     end

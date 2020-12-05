@@ -6,7 +6,7 @@ class ServiceGroup < ApplicationRecord
   has_many :beach_sensors, dependent: :destroy
   has_many :bus_sensors, dependent: :destroy
 
-  after_create :provide_service_group_to_orion, :suscribe_pygeoapi_to_orion
+  after_create :provide_service_group_to_orion #, :suscribe_pygeoapi_to_orion
 
   private
 
