@@ -83,7 +83,7 @@ class BeachSensor < ApplicationRecord
 
   def send_data(data)
     payload = {
-      value: data
+      value: data.to_s
     }
 
     OrionHelper.make_orion_post_request("#{ENV['IOT_AGENT_NORTH_URL']}/iot/json?k=#{ENV['ORION_API_KEY']}&i=Device#{id.to_s}", payload)
