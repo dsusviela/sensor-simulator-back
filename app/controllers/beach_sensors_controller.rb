@@ -62,6 +62,6 @@ class BeachSensorsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def beach_sensor_params
-      params.require(:beach_sensor).permit(:sensor_type, :location, :beach_id, :random_ceil, :random_floor, :random_seed, :random_std_dev, :alive, :fixed, :fixed_value)
+      params.require(:beach_sensor).permit(:sensor_type, :location, :beach_id, :random_ceil, :random_floor, :alive, :fixed, :fixed_value, :period)
     end
 end
