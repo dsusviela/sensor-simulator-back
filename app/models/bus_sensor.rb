@@ -6,28 +6,26 @@ class BusSensor < ApplicationRecord
   def send_data
     return unless alive
 
-    payload = { location: "#{next_location[0]}, #{next_location[1]}" }
+    current_location = next_location
+    payload = { location: "#{current_location[0]}, #{current_location[1]}" }
 
-    update_location_index_value
-
-    OrionHelper.make_orion_post_request("#{ENV['IOT_AGENT_NORTH_URL']}/iot/json?k=#{ENV['ORION_API_KEY']}&i=Device#{id.to_s}", payload)
+    OrionHelper.make_orion_post_request("#{ENV['IOT_AGENT_NORTH_URL']}/iot/json?k=#{ENV['ORION_API_KEY']}&i=Vehicle#{id.to_s}", payload)
   end
 
   private
 
   def next_location
-    detour = Detour.where(line: line, subline: subline, direction: direction, location_index: location_index)&.first
+    detour = Detour.find_by(line: line, subline: subline, direction: direction, location_index: location_index)
+    if detour
+      self.location_index = self.location_index + 1
+    else
+      detour = Detour.find_by(line: line, subline: subline, direction: direction, location_index: 0)
+      self.location_index = 1
+    end
+    self.save
 
     long_lat_match = detour&.location.to_s.match /(-?[0-9]*\.[0-9]* -?[0-9]*\.[0-9]*)/
-    lon, lat = long_lat_match[0].split
-
-    [lon, lat]
-  end
-
-  def update_location_index_value
-    current_index = location_index
-
-    self.update(location_index: current_index + 1)
+    long_lat_match[0].split
   end
 
   def provide_sensor_to_orion
