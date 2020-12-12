@@ -27,13 +27,13 @@ class BeachSensor < ApplicationRecord
 
   def should_send_data(ticks)
     if sensor_type == "agua"
-      return ticks % 2 == 0
+      return ticks % period == 0
     elsif sensor_type == "personas"
-      return ticks % 1 == 0
+      return ticks % period == 0
     elsif sensor_type == "uv"
-      return ticks % 5 == 0
+      return ticks % period == 0
     else
-      return ticks % 3 == 0
+      return ticks % period == 0
     end
   end
 
