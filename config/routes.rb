@@ -5,4 +5,5 @@ Rails.application.routes.draw do
 
   delete '/beach_sensors/', to: 'beach_sensors#delete_all'
   delete '/bus_sensors/', to: 'bus_sensors#delete_all'
+  post "beach_sensors/preload_data", to: "beach_sensors#preload_data"
 end

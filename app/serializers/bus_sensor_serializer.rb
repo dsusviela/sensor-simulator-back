@@ -1,10 +1,10 @@
-include ::Geo::Coder
+require "geocoder"
 
 class BusSensorSerializer < ActiveModel::Serializer
 
   attributes :id, :line, :subline, :direction, :location, :alive
 
   def location
-    encode(object.location)
+    Geocoder.encode(object.location)
   end
 end
