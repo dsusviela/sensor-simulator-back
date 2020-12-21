@@ -8,7 +8,11 @@ geojson_file_names = Dir.entries(GEOJSON_FILES_DIR)
 geojson_file_names.delete(".")
 geojson_file_names.delete("..")
 
+skipable_file_names = [".", "..", ".DS_Store"]
+
 geojson_file_names.each do |geojson_file_name|
+  next if skipable_file_names.include? geojson_file_name
+
   line, direction, subline = geojson_file_name.split("_")
   location_index = 0
 

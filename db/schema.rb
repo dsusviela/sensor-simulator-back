@@ -42,7 +42,18 @@ ActiveRecord::Schema.define(version: 2020_12_08_230520) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "service_group_id", null: false
+    t.integer "location_index"
     t.index ["service_group_id"], name: "index_bus_sensors_on_service_group_id"
+  end
+
+  create_table "detours", force: :cascade do |t|
+    t.string "line"
+    t.string "subline"
+    t.string "direction"
+    t.integer "location_index"
+    t.geometry "location", limit: {:srid=>4326, :type=>"st_point"}
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "service_groups", force: :cascade do |t|

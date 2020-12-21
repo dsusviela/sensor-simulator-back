@@ -19,7 +19,7 @@ class BusSensorsController < ApplicationController
     @bus_sensor.service_group = ServiceGroupHelper.get_or_initialize_service_group(false)
 
     if @bus_sensor.save
-      render json: @bus_sensor, status: :created, location: @bus_sensor
+      render json: @bus_sensor, status: :created
     else
       render json: @bus_sensor.errors, status: :unprocessable_entity
     end
@@ -36,12 +36,6 @@ class BusSensorsController < ApplicationController
 
   def update
     sensor_params = bus_sensor_params.to_h
-    location = params[:bus_sensor][:location]
-
-    if location.present?
-      lon, lat = location.split
-      sensor_params[:location] = RGeo::Geographic.spherical_factory(srid: ENV['SRID']).point(lon, lat)
-    end
 
     if @bus_sensor.update(sensor_params)
       render json: @bus_sensor
