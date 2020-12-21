@@ -3,7 +3,30 @@ class BusSensor < ApplicationRecord
 
   after_create :provide_sensor_to_orion
 
+  def send_data
+    return unless alive
+
+    current_location = next_location
+    payload = { location: "#{current_location[0]}, #{current_location[1]}" }
+
+    OrionHelper.make_orion_post_request("#{ENV['IOT_AGENT_NORTH_URL']}/iot/json?k=#{ENV['ORION_API_KEY']}&i=Vehicle#{id.to_s}", payload)
+  end
+
   private
+
+  def next_location
+    detour = Detour.find_by(line: line, subline: subline, direction: direction, location_index: location_index)
+    if detour
+      self.location_index = self.location_index + 1
+    else
+      detour = Detour.find_by(line: line, subline: subline, direction: direction, location_index: 0)
+      self.location_index = 1
+    end
+    self.save
+
+    long_lat_match = detour&.location.to_s.match /(-?[0-9]*\.[0-9]* -?[0-9]*\.[0-9]*)/
+    long_lat_match[0].split
+  end
 
   def provide_sensor_to_orion
     payload = {
