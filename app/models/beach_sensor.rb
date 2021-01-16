@@ -14,7 +14,7 @@ class BeachSensor < ApplicationRecord
   end
 
   def generate_people_and_send_data(ticks, current_people, beach_capacity)
-    return unless alive
+    return 0 unless alive
     reading = 0
     if should_send_data(ticks)
       reading = generate_people_data(ticks, current_people, beach_capacity)

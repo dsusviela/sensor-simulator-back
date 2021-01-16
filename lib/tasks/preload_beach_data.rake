@@ -10,22 +10,26 @@ namespace :beach do
       "uv" => {
         "ceil" => 8,
         "floor" => 2,
-        "std_dev" => 2
+        "std_dev" => 2,
+        "period" => 1
       },
       "personas" => {
         "ceil" => 200,
         "floor" => 0,
-        "std_dev" => 50
+        "std_dev" => 50,
+        "period" => 1
       },
       "bandera" => {
         "ceil" => 2,
         "floor" => 0,
-        "std_dev" => 1
+        "std_dev" => 1,
+        "period" => 1
       },
       "agua" => {
         "ceil" => 10,
         "floor" => 0,
-        "std_dev" => 3
+        "std_dev" => 3,
+        "period" => 1
       }
     }.freeze
 
@@ -56,7 +60,8 @@ namespace :beach do
           alive: true,
           fixed: false,
           beach_id: props["id_playa"],
-          service_group_id: service_group.id
+          service_group_id: service_group.id,
+          period: RANGES_BY_TYPE[sensor_type]["period"]
         )
       end
 
