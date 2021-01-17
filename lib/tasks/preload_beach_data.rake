@@ -8,27 +8,27 @@ namespace :beach do
     BEACH_DATA_FOLDER = "#{Rails.root}/public/beach_geojson/".freeze
     RANGES_BY_TYPE = {
       "uv" => {
-        "ceil" => 8,
-        "floor" => 2,
+        "ceil" => 11,
+        "floor" => 1,
         "std_dev" => 2,
         "period" => 1
       },
       "personas" => {
-        "ceil" => 200,
+        "ceil" => 10,
         "floor" => 0,
-        "std_dev" => 50,
+        "std_dev" => 2,
         "period" => 1
       },
       "bandera" => {
         "ceil" => 2,
         "floor" => 0,
-        "std_dev" => 1,
+        "std_dev" => 2,
         "period" => 1
       },
       "agua" => {
-        "ceil" => 10,
+        "ceil" => 1,
         "floor" => 0,
-        "std_dev" => 3,
+        "std_dev" => 2,
         "period" => 1
       }
     }.freeze

@@ -1,7 +1,7 @@
 class BeachSimulator
   def initialize
     @current_people = 0
-    @beach_capacity = 100
+    @beach_capacity = 10000
     @ticks = 0
   end
 

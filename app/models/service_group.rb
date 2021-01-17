@@ -28,7 +28,7 @@ class ServiceGroup < ApplicationRecord
 
   def suscribe_pygeoapi_to_orion
     description, suscription_type, notification_attributes, sensor_attributes = get_suscription_data
-    target_endpoint = "beach-sensor-update"
+    target_endpoint = is_beach? ? "beach-sensor-update" : "detour"
     payload = {
       description: description,
       subject: {
@@ -50,7 +50,7 @@ class ServiceGroup < ApplicationRecord
         attrsFormat: "keyValues",
         metadata: ["dateCreated", "dateModified"]
       },
-      throttling: 1
+      throttling: 0
     }
 
     response = OrionHelper.make_orion_post_request("#{ENV['CONTEXT_BROKER_URL']}/v2/subscriptions/", payload)
@@ -60,7 +60,7 @@ class ServiceGroup < ApplicationRecord
     description = "Notify pygeoapi of changes in a bus location value"
     suscription_type = "Vehicle"
     notification_attributes = ["location"]
-    sensor_attributes = ["linea", "sublinea", "sentido", "location"]
+    sensor_attributes = ["linea", "sublinea", "sentido", "location", "id"]
 
     if is_beach?
       description = "Notify pygeoapi of changes in a beach sensor value"
@@ -78,8 +78,7 @@ class ServiceGroup < ApplicationRecord
       object_string = "%7B"
       object_string += "%22id%22%3A%22#{attribute}%22%2C"
 
-      value = attribute == "timestamp" ? "${TimeInstant}" : "${#{attribute}}"
-      object_string += "%22value%22%3A%22#{value}%22%2C"
+      object_string += "%22value%22%3A%22${#{attribute}}%22%2C"
 
       object_string += "%22type%22%3A%22text%2Fplain%22"
 
