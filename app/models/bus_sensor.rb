@@ -7,7 +7,7 @@ class BusSensor < ApplicationRecord
     return unless alive
 
     current_location = next_location
-    payload = { location: "#{current_location[0]}, #{current_location[1]}" }
+    payload = { location: "#{current_location[1]}, #{current_location[0]}" }
 
     OrionHelper.make_orion_post_request("#{ENV['IOT_AGENT_NORTH_URL']}/iot/json?k=#{ENV['ORION_API_KEY']}&i=Vehicle#{id.to_s}", payload)
   end
