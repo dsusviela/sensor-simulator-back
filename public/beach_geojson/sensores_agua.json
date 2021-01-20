@@ -1,5 +1,5 @@
 {"type":"FeatureCollection", "features": [
-{"type":"Feature","geometry":{"type":"Point","coordinates":[-56.17218385190119, -34.9162503499201]},"properties":{"id":1,"id_playa":1}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[-56.14173891385575, -34.91516843907963]},"properties":{"id":2,"id_playa":2}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[-56.118830984825074, -34.90126383944767]},"properties":{"id":3,"id_playa":3}}
+{"type":"Feature","geometry":{"type":"Point","coordinates":[-56.171355347637601, -34.916147914970935]},"properties":{"id":1,"id_playa":1}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[-56.14518577444418, -34.913420410232007]},"properties":{"id":2,"id_playa":2}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[-56.119916703463367, -34.900095122614246]},"properties":{"id":3,"id_playa":3}}
 ]}
