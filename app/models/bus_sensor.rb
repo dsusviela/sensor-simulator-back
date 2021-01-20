@@ -12,6 +12,12 @@ class BusSensor < ApplicationRecord
     OrionHelper.make_orion_post_request("#{ENV['IOT_AGENT_NORTH_URL']}/iot/json?k=#{ENV['ORION_API_KEY']}&i=Vehicle#{id.to_s}", payload)
   end
 
+  def location
+    detour = Detour.find_by(line: self.line, subline: self.subline, direction: self.direction, location_index: self.location_index)
+    location = detour.location
+    Geocoder.encode(location)
+  end
+
   private
 
   def next_location

@@ -5,12 +5,22 @@ class BusSensorsController < ApplicationController
   def index
     @bus_sensors = BusSensor.all
 
-    render json: @bus_sensors
+    response = []
+    @bus_sensors.each do |sensor|
+      attrs = sensor.attributes
+      attrs[:location] = sensor.location
+      response << attrs
+    end
+
+    render json: response
   end
 
   # GET /bus_sensors/1
   def show
-    render json: @bus_sensor
+    location = @bus_sensor.location
+    response = @bus_sensor.attributes
+    response[:location] = location
+    render json: response
   end
 
   # POST /bus_sensors

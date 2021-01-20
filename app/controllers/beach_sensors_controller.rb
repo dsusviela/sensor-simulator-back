@@ -22,7 +22,7 @@ class BeachSensorsController < ApplicationController
   def create
     @beach_sensor = BeachSensor.new(beach_sensor_params)
     lon, lat = params[:beach_sensor][:location].split
-    @beach_sensor.location = RGeo::Geographic.spherical_factory(srid: ENV['SRID']).point(lon, lat)
+    @beach_sensor.location = RGeo::Geographic.spherical_factory(srid: ENV['SRID']).point(lat, lon)
     @beach_sensor.service_group = ServiceGroupHelper.get_or_initialize_service_group(true)
 
     if @beach_sensor.save
