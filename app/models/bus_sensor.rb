@@ -3,6 +3,8 @@ class BusSensor < ApplicationRecord
 
   after_create :provide_sensor_to_orion
 
+  before_destroy :remove_sensor_from_orion
+
   def send_data
     return unless alive
 
@@ -54,5 +56,9 @@ class BusSensor < ApplicationRecord
     }
 
     response = OrionHelper.make_orion_post_request("#{ENV['IOT_AGENT_SOUTH_URL']}/iot/devices", payload)
+  end
+
+  def remove_sensor_from_orion
+    OrionHelper.delete_entity(self.id, false)
   end
 end

@@ -4,6 +4,8 @@ class BeachSensor < ApplicationRecord
 
   after_create :provide_sensor_to_orion
 
+  before_destroy :remove_sensor_from_orion
+
   def generate_and_send_data(ticks)
     return unless alive
 
@@ -112,6 +114,10 @@ class BeachSensor < ApplicationRecord
     }
 
     response = OrionHelper.make_orion_post_request("#{ENV['IOT_AGENT_SOUTH_URL']}/iot/devices", payload)
+  end
+
+  def remove_sensor_from_orion
+    OrionHelper.delete_entity(self.id, true)
   end
 
   def generate_data_with_gauss
