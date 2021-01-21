@@ -59,6 +59,8 @@ class BeachSensorsController < ApplicationController
     BeachSensor.all.each do |sensor|
       sensor.destroy
     end
+
+    render head: :ok
   end
 
   def preload_data
