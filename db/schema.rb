@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_08_230520) do
+ActiveRecord::Schema.define(version: 2021_01_21_193254) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,6 @@ ActiveRecord::Schema.define(version: 2020_12_08_230520) do
     t.integer "random_ceil"
     t.integer "random_floor"
     t.integer "random_seed"
-    t.integer "random_std_dev"
     t.boolean "alive"
     t.boolean "fixed"
     t.integer "fixed_value"

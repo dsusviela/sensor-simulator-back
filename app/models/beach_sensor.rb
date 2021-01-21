@@ -119,23 +119,4 @@ class BeachSensor < ApplicationRecord
   def remove_sensor_from_orion
     OrionHelper.delete_entity(self.id, true)
   end
-
-  def generate_data_with_gauss
-    return fixed_value if fixed
-
-    raise 'sth went wrong; maxrange < minrange' if random_ceil < random_floor
-
-    math_helper = MathsHelper.new
-    mean = math_helper.mean((random_floor..random_ceil).to_a)
-    std = random_std_dev.present? ? random_std_dev : 1
-    math_helper.initialize_gaussian(mean, std)
-
-    valid = false
-    current_reading = 0
-    while !valid do
-      current_reading = math_helper.rand.round
-      valid = random_floor <= current_reading && current_reading <= random_ceil
-    end
-    current_reading
-  end
 end

@@ -55,7 +55,6 @@ namespace :beach do
           location: point,
           random_ceil: RANGES_BY_TYPE[sensor_type]["ceil"],
           random_floor: RANGES_BY_TYPE[sensor_type]["floor"],
-          random_std_dev: RANGES_BY_TYPE[sensor_type]["std_dev"],
           random_seed: 1,
           alive: true,
           fixed: false,
