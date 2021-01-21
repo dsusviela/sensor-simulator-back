@@ -72,6 +72,6 @@ class BusSensorsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def bus_sensor_params
-      params.require(:bus_sensor).permit(:line, :subline, :direction, :alive)
+      params.require(:bus_sensor).permit(:line, :subline, :direction, :alive, :location_index)
     end
 end

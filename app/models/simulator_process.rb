@@ -6,7 +6,7 @@ class SimulatorProcess < ApplicationRecord
   def schedule_job
     unless job_id.present?
       simulator_class = is_beach ? BeachSimulator.new : BusSimulator.new
-      self.job_id = rufus_singleton.every '5s', simulator_class
+      self.job_id = rufus_singleton.interval '5s', simulator_class
     end
   end
 
