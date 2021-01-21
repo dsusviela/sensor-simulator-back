@@ -61,7 +61,9 @@ class BusSensorsController < ApplicationController
 
   # DELETE /beach_sensors/
   def delete_all
-    BusSensor.delete_all
+    BusSensor.all.each do |sensor|
+      sensor.destroy
+    end
   end
 
   def preload_data
