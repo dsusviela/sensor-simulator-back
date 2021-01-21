@@ -64,6 +64,12 @@ class BusSensorsController < ApplicationController
     BusSensor.delete_all
   end
 
+  def preload_data
+    Rake::Task['bus:preload_data'].invoke
+
+    render head: :ok
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_bus_sensor
