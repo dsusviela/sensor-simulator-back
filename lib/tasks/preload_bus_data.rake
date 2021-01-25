@@ -6,7 +6,7 @@ namespace :bus do
   desc 'preload bus data'
   task :preload_data => :environment do
     BUS_DATA_FOLDER = "#{Rails.root}/db/detours_geojsons/".freeze
-    service_group = ServiceGroupHelper.get_or_initialize_service_group(true)
+    service_group = ServiceGroupHelper.get_or_initialize_service_group(false)
 
     Find.find(BUS_DATA_FOLDER) do |path|
       next if File.directory?(path)
