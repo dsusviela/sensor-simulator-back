@@ -70,6 +70,7 @@ class BusSensorsController < ApplicationController
 
   def preload_data
     Rake::Task['bus:preload_data'].invoke
+    Rake::Task['bus:preload_data'].reenable
 
     render head: :ok
   end

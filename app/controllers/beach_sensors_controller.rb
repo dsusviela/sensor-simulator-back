@@ -65,6 +65,7 @@ class BeachSensorsController < ApplicationController
 
   def preload_data
     Rake::Task['beach:preload_data'].invoke
+    Rake::Task['beach:preload_data'].reenable
 
     render head: :ok
   end
