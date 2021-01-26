@@ -94,6 +94,14 @@ class BeachSensor < ApplicationRecord
   def provide_sensor_to_orion
     long_lat_match = location.to_s.match /(-?[0-9]*\.[0-9]* -?[0-9]*\.[0-9]*)/
     lon, lat = long_lat_match[0].split
+
+    controlledProperty = {
+      personas: "occupancy",
+      uv: "solarRadiation",
+      agua: "waterPollution",
+      bandera: "weatherConditions"
+    }
+
     payload = {
       devices: [
         {
@@ -103,8 +111,9 @@ class BeachSensor < ApplicationRecord
           static_attributes: [
             { name: "simulator_id", type: "Text", value: id.to_s },
             { name: "location", type: "geo:point", value: "#{lon}, #{lat}"},
-            { name: "beach_id", type: "Text", value: beach_id.to_s },
-            { name: "sensor_type", type: "Text", value: sensor_type.to_s }
+            { name: "controlledAsset", type: "Text", value: beach_id.to_s },
+            { name: "category", type: "Text", value: "sensor" },
+            { name: "controlledProperty", type: "Text", value: "#{controlledProperty[sensor_type.to_sym]}" }
           ],
           attributes: [
             { object_id: "value", name: "value", type: "Text" }

@@ -66,7 +66,7 @@ class ServiceGroup < ApplicationRecord
       description = "Notify pygeoapi of changes in a beach sensor value"
       suscription_type = "Device"
       notification_attributes = ["value"]
-      sensor_attributes = ["simulator_id", "location", "beach_id", "sensor_type", "value"]
+      sensor_attributes = ["simulator_id", "location", "controlledAsset", "controlledProperty", "value"]
     end
 
     [description, suscription_type, notification_attributes, sensor_attributes]
