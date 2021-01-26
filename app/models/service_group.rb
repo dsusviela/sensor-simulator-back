@@ -60,7 +60,7 @@ class ServiceGroup < ApplicationRecord
     description = "Notify pygeoapi of changes in a bus location value"
     suscription_type = "Vehicle"
     notification_attributes = ["location"]
-    sensor_attributes = ["linea", "sublinea", "sentido", "location", "id"]
+    sensor_attributes = ["heading", "fleetVehicleId", "location"]
 
     if is_beach?
       description = "Notify pygeoapi of changes in a beach sensor value"

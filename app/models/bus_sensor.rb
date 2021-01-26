@@ -37,6 +37,7 @@ class BusSensor < ApplicationRecord
   end
 
   def provide_sensor_to_orion
+    degrees = subline == 'A' ? 0 : 180
     payload = {
       devices: [
         {
@@ -44,9 +45,13 @@ class BusSensor < ApplicationRecord
           entity_name: "urn:ngsi-ld:Vehicle:#{id}",
           entity_type: 'Vehicle',
           static_attributes: [
-            { name: "linea", type: "Text", value: line },
-            { name: "sublinea", type: "Text", value: subline },
-            { name: "sentido", type: "Text", value: direction }
+            { name: "vehicleType", type: "Text", value: "bus" },
+            { name: "category", type: "Text", value: "public" },
+            { name: "heading", type: "Integer", value: degrees },
+            { name: "fleetVehicleId", type: "Text", value: "#{line}-#{subline}-#{id}" },
+            { name: "serviceProvided", type: "Text", value: "urbanTransit" },
+            { name: "areaServed", type: "Text", value: "Montevideo" },
+            { name: "serviceStatus", type: "Text", value: "onRoute" }
           ],
           attributes: [
             { object_id: 'location', name: 'location', type: 'geo:point' }
