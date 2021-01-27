@@ -50,7 +50,7 @@ namespace :beach do
         point = Geocoder.point(coords)
         props = feature["properties"]
 
-        BeachSensor.create!(
+        BeachSensor.find_or_create_by(
           sensor_type: sensor_type,
           location: point,
           random_ceil: RANGES_BY_TYPE[sensor_type]["ceil"],

@@ -14,7 +14,7 @@ namespace :bus do
       file_name = File.basename(path, ".geojson")
       match = file_name.match(/(\d*)_(\w)_(\d)/)
 
-      BusSensor.create!(
+      BusSensor.find_or_create_by(
         line: match[1],
         direction: match[2],
         subline: match[3],
