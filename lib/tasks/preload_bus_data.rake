@@ -12,7 +12,7 @@ namespace :bus do
       next if File.directory?(path)
 
       file_name = File.basename(path, ".geojson")
-      match = file_name.match(/(\d*)_(\w)_(\d)/)
+      match = file_name.match(/(\d*)_(\w)_(\d*)/)
 
       BusSensor.find_or_create_by(
         line: match[1],
