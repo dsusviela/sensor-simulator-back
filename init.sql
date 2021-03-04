@@ -1,1 +1,1 @@
-CREATE USER sensor_simulator_backend_development SUPERUSER;
+CREATE USER docker_user SUPERUSER;

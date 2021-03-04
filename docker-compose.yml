@@ -11,11 +11,17 @@ services:
     # Use the postgres 11.5 base image for this container.
     image: kartoza/postgis:13.0
     environment:
-      - POSTGRES_DB=sensor_simulator_backend_development
+      - POSTGRES_DB=sensorsbackenddb
       - POSTGRES_USER=docker
       - POSTGRES_PASS=docker
       - PGPASSWORD=docker
       - ALLOW_IP_RANGE=0.0.0.0/0
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+    ports:
+      - "25432:5432"
+    restart: on-failure
+    healthcheck:
+      test: "exit 0"
     volumes:
       # We need to tell Docker where on the PostgreSQL
       # container we want to keep the PostgreSQL data.
@@ -27,7 +33,7 @@ services:
       # called a volume. (You can see all your Docker
       # volumes by running +docker volume ls+.) The name
       # of our volume is db_data.
-      - db_data:/var/lib/postgresql/data
+      # - db_data:/var/lib/postgresql/data
 
       # This copies our init.sql into our container, to
       # a special file called
@@ -44,13 +50,6 @@ services:
     # The root directory from which we're building.
     image: sensorsimulatorbackend
 
-    # This makes it so any code changes inside the project
-    # directory get synced with Docker. Without this line,
-    # we'd have to restart the container every time we
-    # changed a file.
-    volumes:
-      - .:/code:cached
-
     # The command to be run when we run "docker-compose up".
     command: bash -c "rm -f tmp/pids/server.pid && /usr/local/bin/init.sh"
 
@@ -62,16 +61,27 @@ services:
     # container which we've called "database".
     depends_on:
       - database
+    links:
+      - database
 
     # Specify the values of the environment variables
     # used in this container.
     environment:
-      RAILS_ENV: development
-      DATABASE_NAME: sensor_simulator_backend_development
-      DATABASE_USER: docker
-      DATABASE_PASSWORD: docker
-      DATABASE_HOST: database
+      - RAILS_ENV=development
+      - DATABASE_NAME=sensorsbackenddb
+      - DATABASE_USER=docker
+      - DATABASE_PASSWORD=docker
+      - DATABASE_PORT=5432
+      - DATABASE_HOST=database
+      - SRID=4326
+      - ORION_API_KEY=4jggokgpepnvsb2uv4s40d59ov
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.21.1.0/24
 
 # Declare the volumes that our application uses.
 volumes:
-  db_data:
+  database: ~
