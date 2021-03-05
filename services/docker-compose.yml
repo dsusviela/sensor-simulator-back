@@ -1,10 +1,5 @@
 version: "3.5"
 services:
-  tcpdump:
-    image: kaazing/tcpdump
-    network_mode: "host"
-    volumes:
-      - ./tcpdump:/tcpdump
   # Orion is the context broker
   orion:
     image: fiware/orion:${ORION_VERSION}
@@ -14,31 +9,52 @@ services:
       - mongo-db
     networks:
       - default
-    expose:
-      - "${ORION_PORT}"
+    # expose:
+    #   - "${ORION_PORT}"
     ports:
       - "${ORION_PORT}:${ORION_PORT}" # localhost:1026
     command: -dbhost mongo-db -logLevel DEBUG -corsOrigin __ALL -corsMaxAge 600
     healthcheck:
       test: curl --fail -s http://orion:${ORION_PORT}/version || exit 1
 
-  # pocmonitordesvios:
-  #   image: pocmonitordesvios
-  #   build: .
-  #   environment:
-  #     NODE_ENV: production
-  #   ports:
-  #     - "${MONITOR_PORT}:${MONITOR_PORT}"
-
   pygeoapi:
     image: pygeoapi
     ports:
       - "5000:5000"
 
+  simulator-backend:
+    image: sensorsimulatorbackend:latest
+    command: bash -c "rm -f tmp/pids/server.pid && /usr/local/bin/init.sh"
+    # Expose port 7000.
+    ports:
+      - "7000:7000"
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_NAME=sensorsbackenddb
+      - DATABASE_USER=docker
+      - DATABASE_PASSWORD=docker
+      - DATABASE_PORT=5432
+      - DATABASE_HOST=postgres
+      - SRID=4326
+      - ORION_API_KEY=4jggokgpepnvsb2uv4s40d59ov
+      - CONTEXT_BROKER_URL=http://orion:${ORION_PORT}
+      - IOT_AGENT_SOUTH_URL=http://iot-agent:4041
+      - IOT_AGENT_NORTH_URL=http://iot-agent:7896
+
   sensor-simulator-front:
     image: sensor-simulator-front
     ports:
       - "7070:7070"
+
+  visualizador-desvios:
+    image: visualizador-desvios
+    stdin_open: true
+    ports:
+      - "3001:3001"
 
   postgres:
     image: kartoza/postgis:12.0
@@ -55,8 +71,8 @@ services:
       - ALLOW_IP_RANGE=0.0.0.0/0
       # Add extensions you need to be enabled by default in the DB. Default are the five specified below
       - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
-    ports:
-      - "25432:5432"
+    # ports:
+    #   - "25432:5432"
     restart: on-failure
     healthcheck:
       test: "exit 0"
@@ -70,12 +86,12 @@ services:
         - mongo-db
     networks:
         - default
-    expose:
-        - "4041"
-        - "7896"
-    ports:
-        - "4041:4041"
-        - "7896:7896"
+    # expose:
+    #     - "4041"
+    #     - "7896"
+    # ports:
+    #     - "4041:4041"
+    #     - "7896:7896"
     environment:
         - IOTA_CB_HOST=orion
         - IOTA_CB_PORT=1026
@@ -97,10 +113,10 @@ services:
     image: mongo:${MONGO_DB_VERSION}
     hostname: mongo-db
     container_name: db-mongo
-    expose:
-      - "${MONGO_DB_PORT}"
-    ports:
-      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}" # localhost:27017
+    # expose:
+    #   - "${MONGO_DB_PORT}"
+    # ports:
+    #   - "${MONGO_DB_PORT}:${MONGO_DB_PORT}" # localhost:27017
     networks:
       - default
     command: --bind_ip_all --smallfiles
