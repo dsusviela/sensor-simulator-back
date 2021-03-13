@@ -1,39 +1,89 @@
 version: "3.5"
 services:
-  tcpdump:
-    image: kaazing/tcpdump
-    network_mode: "host"
-    volumes:
-      - ./tcpdump:/tcpdump
+  # FIWARE
+
   # Orion is the context broker
   orion:
-    image: fiware/orion:${ORION_VERSION}
+    image: fiware/orion:2.4.0
     hostname: orion
     container_name: fiware-orion
     depends_on:
       - mongo-db
     networks:
       - default
-    expose:
-      - "${ORION_PORT}"
     ports:
-      - "${ORION_PORT}:${ORION_PORT}" # localhost:1026
+      - "1026:1026"
     command: -dbhost mongo-db -logLevel DEBUG -corsOrigin __ALL -corsMaxAge 600
     healthcheck:
-      test: curl --fail -s http://orion:${ORION_PORT}/version || exit 1
+      test: curl --fail -s http://orion:1026/version || exit 1
 
-  # pocmonitordesvios:
-  #   image: pocmonitordesvios
-  #   build: .
-  #   environment:
-  #     NODE_ENV: production
-  #   ports:
-  #     - "${MONITOR_PORT}:${MONITOR_PORT}"
+  # IoT-Agent is configured for the Json Protocol
+  iot-agent:
+    image: fiware/iotagent-json:1.15.0
+    hostname: iot-agent
+    container_name: fiware-iot-agent
+    depends_on:
+      - mongo-db
+    networks:
+      - default
+    environment:
+      - IOTA_CB_HOST=orion
+      - IOTA_CB_PORT=1026
+      - IOTA_NORTH_PORT=4041
+      - IOTA_REGISTRY_TYPE=mongodb
+      - IOTA_LOG_LEVEL=DEBUG
+      - IOTA_TIMESTAMP=true
+      - IOTA_CB_NGSI_VERSION=v2
+      - IOTA_AUTOCAST=true
+      - IOTA_MONGO_HOST=mongo-db
+      - IOTA_MONGO_PORT=27017
+      - IOTA_MONGO_DB=iotagentjson
+      - IOTA_HTTP_PORT=7896
+      - IOTA_PROVIDER_URL=http://iot-agent:4041
+      - IOTA_DEFAULT_RESOURCE=/iot/json
 
-  pygeoapi:
-    image: pygeoapi
+
+  # GIS server
+  gis-server:
+    image: gastonabella/gis-server:latest
+    hostname: pygeoapi
     ports:
       - "5000:5000"
+
+  sensor-platform-backend:
+    image: gastonabella/sensor-platform-backend:latest
+    command: bash -c "rm -f tmp/pids/server.pid && /usr/local/bin/init.sh"
+    ports:
+      - "7000:7000"
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_NAME=sensorsbackenddb
+      - DATABASE_USER=docker
+      - DATABASE_PASSWORD=docker
+      - DATABASE_PORT=5432
+      - DATABASE_HOST=postgres
+      - SRID=4326
+      - ORION_API_KEY=4jggokgpepnvsb2uv4s40d59ov
+      - CONTEXT_BROKER_URL=http://orion:1026
+      - IOT_AGENT_SOUTH_URL=http://iot-agent:4041
+      - IOT_AGENT_NORTH_URL=http://iot-agent:7896
+
+  sensor-platform-frontend:
+    image: gastonabella/sensor-platform-frontend:latest
+    ports:
+      - "7070:7070"
+
+  smart-apps:
+    image: gastonabella/smart-apps:latest
+    stdin_open: true
+    ports:
+      - "3001:3001"
+
+  # Databases
 
   postgres:
     image: kartoza/postgis:12.0
@@ -50,52 +100,14 @@ services:
       - ALLOW_IP_RANGE=0.0.0.0/0
       # Add extensions you need to be enabled by default in the DB. Default are the five specified below
       - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
-    ports:
-      - "25432:5432"
     restart: on-failure
     healthcheck:
       test: "exit 0"
 
-  # IoT-Agent is configured for the Json Protocol
-  iot-agent:
-    image: fiware/iotagent-json:1.15.0
-    hostname: iot-agent
-    container_name: fiware-iot-agent
-    depends_on:
-        - mongo-db
-    networks:
-        - default
-    expose:
-        - "4041"
-        - "7896"
-    ports:
-        - "4041:4041"
-        - "7896:7896"
-    environment:
-        - IOTA_CB_HOST=orion
-        - IOTA_CB_PORT=1026
-        - IOTA_NORTH_PORT=4041
-        - IOTA_REGISTRY_TYPE=mongodb
-        - IOTA_LOG_LEVEL=DEBUG
-        - IOTA_TIMESTAMP=true
-        - IOTA_CB_NGSI_VERSION=v2
-        - IOTA_AUTOCAST=true
-        - IOTA_MONGO_HOST=mongo-db
-        - IOTA_MONGO_PORT=27017
-        - IOTA_MONGO_DB=iotagentjson
-        - IOTA_HTTP_PORT=7896
-        - IOTA_PROVIDER_URL=http://iot-agent:4041
-        - IOTA_DEFAULT_RESOURCE=/iot/json
-
-  # Databases
   mongo-db:
-    image: mongo:${MONGO_DB_VERSION}
+    image: mongo:3.6
     hostname: mongo-db
     container_name: db-mongo
-    expose:
-      - "${MONGO_DB_PORT}"
-    ports:
-      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}" # localhost:27017
     networks:
       - default
     command: --bind_ip_all --smallfiles
