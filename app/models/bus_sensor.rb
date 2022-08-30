@@ -9,6 +9,8 @@ class BusSensor < ApplicationRecord
     return unless alive
 
     current_location = next_location
+    return if current_location.nil?
+
     payload = { location: "#{current_location[0]}, #{current_location[1]}" }
 
     OrionHelper.make_orion_post_request("#{ENV['IOT_AGENT_NORTH_URL']}/iot/json?k=#{ENV['ORION_API_KEY']}&i=Vehicle#{id.to_s}", payload)
@@ -27,8 +29,9 @@ class BusSensor < ApplicationRecord
     if detour
       self.location_index = self.location_index + 1
     else
-      detour = Detour.find_by(line: line, subline: subline, direction: direction, location_index: 0)
-      self.location_index = 1
+      self.alive = false
+      self.save
+      return nil
     end
     self.save
 
